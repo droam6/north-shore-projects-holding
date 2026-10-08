@@ -10,7 +10,7 @@ import { site, services, photos, projects, homeSlides, clips, suburbs, steps, re
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const media = JSON.parse(readFileSync(join(root, 'src/media.json'), 'utf8'));
 const LIVE = process.argv.includes('--live');
-const V = '1'; // bump to bust the CSS/JS cache after a change
+const V = '2'; // bump to bust the CSS/JS cache after a change
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const svc = (id) => services.find((s) => s.id === id);

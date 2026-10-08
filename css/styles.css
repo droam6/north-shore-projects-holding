@@ -1,6 +1,6 @@
 /* North Shore Projects
-   Navy and gold from the logos. One typeface (Archivo): wide and light for headings,
-   normal width for text. Photos sit edge to edge with a thin "grout" gap, like tiles. */
+   Navy and gold from the logos. One typeface (Archivo): a touch wider and lighter for
+   headings, normal width for text. Photos sit edge to edge with a thin "grout" gap, like tiles. */
 
 @font-face {
   font-family: "Archivo";
@@ -26,6 +26,12 @@
   --rule-navy: rgba(245, 243, 238, 0.18);
   --error-navy: #FFB4A8;
   --error: #A3261B;
+
+  /* Heading width. 100% is the normal cut of Archivo, 125% the widest.
+     125% read as stretched on short headings ("Get a quote"), so it sits just past normal. */
+  --wide: 106%;
+  --wide-weight: 350;
+  --semi: 103%;
 
   --grout: 6px;
   --gutter: clamp(1.25rem, 4.4vw, 4rem);
@@ -75,15 +81,15 @@ button { font: inherit; color: inherit; }
 /* ───────── Type ───────── */
 
 .hero-h, .h1, .h2, .suburbs, .statement {
-  font-stretch: 125%;
-  font-weight: 300;
-  letter-spacing: -0.022em;
+  font-stretch: var(--wide);
+  font-weight: var(--wide-weight);
+  letter-spacing: -0.018em;
   line-height: 1.06;
   text-wrap: balance;
 }
 .h1 { font-size: clamp(2.375rem, 5.2vw, 4.75rem); }
 .h2 { font-size: clamp(1.75rem, 3.1vw, 2.875rem); }
-.h3 { font-stretch: 112%; font-weight: 400; font-size: 1.25rem; line-height: 1.25; letter-spacing: -0.008em; }
+.h3 { font-stretch: var(--semi); font-weight: 400; font-size: 1.25rem; line-height: 1.25; letter-spacing: -0.008em; }
 .lead { font-size: clamp(1.0625rem, 1.35vw, 1.25rem); line-height: 1.55; max-width: 34em; }
 
 .link {
@@ -123,7 +129,7 @@ button { font: inherit; color: inherit; }
 }
 .brand { display: flex; align-items: center; gap: 0.75rem; margin-right: auto; min-height: 3rem; }
 .brand-mark { height: 2.125rem; width: auto; }
-.brand-name { font-stretch: 125%; font-weight: 400; font-size: 1rem; letter-spacing: 0.005em; white-space: nowrap; }
+.brand-name { font-stretch: var(--wide); font-weight: 400; font-size: 1rem; letter-spacing: 0.005em; white-space: nowrap; }
 @media (max-width: 23.5rem) { .brand { gap: 0.5rem; } .brand-mark { height: 1.75rem; } .brand-name { font-size: 0.8125rem; } }
 
 .nav { display: none; }
@@ -152,7 +158,7 @@ button { font: inherit; color: inherit; }
 .menu-item { display: block; padding-bottom: 0.5rem; }
 .menu-photo { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--navy-lift); transition: opacity 0.2s ease; }
 .menu-item:hover .menu-photo { opacity: 0.86; }
-.menu-name { display: block; margin-top: 0.9rem; padding-right: 1rem; font-stretch: 112%; font-size: 1.125rem; line-height: 1.25; }
+.menu-name { display: block; margin-top: 0.9rem; padding-right: 1rem; font-stretch: var(--semi); font-size: 1.125rem; line-height: 1.25; }
 .menu-item:hover .menu-name, .menu-item[aria-current="page"] .menu-name { color: var(--gold-lit); }
 .menu-sub { display: block; margin-top: 0.2rem; padding-right: 1rem; color: var(--plaster-dim); font-size: 0.9375rem; line-height: 1.4; }
 .menu-foot { max-width: calc(var(--wrap) - var(--gutter) * 2); margin: 1.25rem auto 0; font-size: 0.9375rem; }
@@ -186,7 +192,7 @@ button { font: inherit; color: inherit; }
 .mnav-list a {
   display: flex; align-items: center; min-height: 3.25rem;
   border-bottom: 1px solid var(--rule-navy);
-  font-stretch: 125%; font-weight: 300; font-size: 1.5rem; letter-spacing: -0.015em;
+  font-stretch: var(--wide); font-weight: var(--wide-weight); font-size: 1.5rem; letter-spacing: -0.015em;
 }
 .mnav-list a[aria-current="page"] { color: var(--gold-lit); }
 .mnav-contact { display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; margin-top: 2rem; }
@@ -206,7 +212,7 @@ button { font: inherit; color: inherit; }
 
 .hero { padding-top: clamp(2rem, 4.6vw, 4rem); }
 .hero-top { display: grid; gap: 1.5rem; padding-bottom: clamp(1.75rem, 3.2vw, 2.75rem); }
-.hero-h { font-size: clamp(2rem, 3.75vw, 3.75rem); max-width: 22em; }
+.hero-h { font-size: clamp(2rem, 3.6vw, 3.5rem); max-width: 22em; }
 .hero-side { display: grid; gap: 1.25rem; align-content: end; }
 .hero-lead { font-size: clamp(1.0625rem, 1.3vw, 1.1875rem); line-height: 1.55; max-width: 31em; color: var(--plaster); }
 
@@ -235,7 +241,7 @@ button { font: inherit; color: inherit; }
   background: linear-gradient(to top, rgba(16, 16, 29, 0.88) 0%, rgba(16, 16, 29, 0.5) 45%, rgba(16, 16, 29, 0) 100%);
 }
 .panel-label { position: absolute; left: 1.25rem; right: 1.25rem; bottom: 1.25rem; z-index: 1; }
-.panel-name { display: block; font-stretch: 125%; font-weight: 300; font-size: 1.75rem; letter-spacing: -0.02em; line-height: 1.1; }
+.panel-name { display: block; font-stretch: var(--wide); font-weight: var(--wide-weight); font-size: 1.75rem; letter-spacing: -0.02em; line-height: 1.1; }
 .panel-sub { display: block; margin-top: 0.35rem; font-size: 0.9375rem; line-height: 1.4; color: var(--plaster); }
 .panel-bar { display: none; }
 .panels-pause { display: none; }
@@ -349,7 +355,7 @@ button { font: inherit; color: inherit; }
 
 .ratings { border-top: 1px solid var(--rule-navy); margin-bottom: clamp(2rem, 4vw, 3.25rem); }
 .rating { display: grid; gap: 0.15rem 2rem; padding-block: 1rem; border-bottom: 1px solid var(--rule-navy); align-items: center; }
-.rating-team { font-stretch: 112%; font-size: 1.1875rem; }
+.rating-team { font-stretch: var(--semi); font-size: 1.1875rem; }
 .rating-score, .rating-count { font-variant-numeric: tabular-nums; }
 .rating-count { color: var(--plaster-dim); }
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -360,7 +366,7 @@ button { font: inherit; color: inherit; }
 }
 
 .quote { flex: 0 0 auto; width: min(33rem, 84vw); scroll-snap-align: start; border-top: 1px solid var(--gold); padding: 1.5rem 2rem 0 0; }
-.quote p { font-stretch: 112%; font-weight: 300; font-size: clamp(1.1875rem, 1.6vw, 1.4375rem); line-height: 1.42; letter-spacing: -0.008em; }
+.quote p { font-stretch: var(--semi); font-weight: 300; font-size: clamp(1.1875rem, 1.6vw, 1.4375rem); line-height: 1.42; letter-spacing: -0.008em; }
 .quote footer { margin-top: 1.25rem; color: var(--plaster-dim); font-size: 0.9375rem; }
 .quote footer a { color: var(--plaster); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.3em; text-decoration-color: rgba(245, 243, 238, 0.4); }
 .quote footer a:hover { text-decoration-color: currentColor; }
@@ -372,7 +378,7 @@ button { font: inherit; color: inherit; }
 
 .quote-grid { display: grid; gap: 2rem; }
 .quote-grid li { border-top: 1px solid var(--brass); padding-top: 1.25rem; }
-.quote-grid p { font-stretch: 112%; font-weight: 300; font-size: clamp(1.125rem, 1.5vw, 1.3125rem); line-height: 1.45; }
+.quote-grid p { font-stretch: var(--semi); font-weight: 300; font-size: clamp(1.125rem, 1.5vw, 1.3125rem); line-height: 1.45; }
 @media (min-width: 56rem) { .quote-grid { grid-template-columns: repeat(3, 1fr); gap: 2.5rem; } }
 .carousel--quotes .carousel-count { display: none; }
 
@@ -382,7 +388,7 @@ button { font: inherit; color: inherit; }
 .index-row { display: grid; gap: 1.25rem; padding-block: 2rem; border-top: 1px solid var(--rule); }
 .index-row:last-child { border-bottom: 1px solid var(--rule); }
 .index-name { display: flex; align-items: center; gap: 1rem; }
-.index-name .h3 { font-size: clamp(1.375rem, 2vw, 1.75rem); font-stretch: 125%; font-weight: 300; letter-spacing: -0.018em; }
+.index-name .h3 { font-size: clamp(1.375rem, 2vw, 1.75rem); font-stretch: var(--wide); font-weight: var(--wide-weight); letter-spacing: -0.018em; }
 .index-name a { display: inline-flex; align-items: center; min-height: 2.75rem; }
 .index-name a:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.25em; }
 .index-mark { flex: none; width: 3.25rem; height: 2.5rem; background: var(--navy); -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
@@ -436,7 +442,7 @@ button { font: inherit; color: inherit; }
 .social-mark { height: 2.25rem; width: 3.25rem; object-fit: contain; flex: none; }
 .social-text { display: block; }
 .social-name { display: block; color: var(--plaster-dim); font-size: 0.9375rem; line-height: 1.3; }
-.social-handle { display: block; font-stretch: 112%; font-size: 1.125rem; line-height: 1.35; }
+.social-handle { display: block; font-stretch: var(--semi); font-size: 1.125rem; line-height: 1.35; }
 .social:hover .social-handle { color: var(--gold-lit); }
 @media (min-width: 40rem) { .socials { grid-template-columns: 1fr 1fr; column-gap: 3rem; } }
 @media (min-width: 75rem) { .socials { grid-template-columns: repeat(4, 1fr); column-gap: 2rem; } .social { border-bottom: 0; } }
@@ -460,7 +466,7 @@ button { font: inherit; color: inherit; }
 
 .direct { display: grid; gap: 1.25rem; margin-top: 2.25rem; }
 .direct dt { color: var(--plaster-dim); font-size: 0.9375rem; }
-.direct dd a { display: inline-flex; align-items: center; min-height: 2.75rem; font-stretch: 112%; font-size: 1.375rem; font-variant-numeric: tabular-nums; }
+.direct dd a { display: inline-flex; align-items: center; min-height: 2.75rem; font-stretch: var(--semi); font-size: 1.375rem; font-variant-numeric: tabular-nums; }
 .direct dd a:hover { color: var(--gold-lit); }
 .direct--stack { margin-top: 0; }
 .direct--stack dd a { font-size: 1.125rem; word-break: break-word; }
@@ -510,7 +516,7 @@ button { font: inherit; color: inherit; }
 .form-status a { text-decoration: underline; text-underline-offset: 0.25em; }
 .form-done { padding: 2rem 0; border-top: 1px solid var(--gold); border-bottom: 1px solid var(--rule-navy); }
 .form-done:focus { outline: none; }
-.form-done-h { font-stretch: 125%; font-weight: 300; font-size: clamp(1.75rem, 2.6vw, 2.25rem); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 0.75rem; }
+.form-done-h { font-stretch: var(--wide); font-weight: var(--wide-weight); font-size: clamp(1.75rem, 2.6vw, 2.25rem); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 0.75rem; }
 
 /* ───────── Page heads (inner pages) ───────── */
 
@@ -547,15 +553,15 @@ button { font: inherit; color: inherit; }
 @media (min-width: 64rem) { .offers { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 4rem; } }
 .offer { display: grid; gap: 0.15rem 2rem; padding-block: 1.1rem; border-top: 1px solid var(--rule); }
 .offer:last-child { border-bottom: 1px solid var(--rule); }
-.offer dt { font-stretch: 112%; font-size: 1.1875rem; line-height: 1.3; }
+.offer dt { font-stretch: var(--semi); font-size: 1.1875rem; line-height: 1.3; }
 .offer dd { color: var(--slate); }
 @media (min-width: 40rem) { .offer { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); align-items: baseline; } }
 
 .steps { counter-reset: step; display: grid; gap: 0; }
 .step { counter-increment: step; display: grid; grid-template-columns: 2.5rem 1fr; gap: 0.1rem 0.5rem; padding-block: 1.1rem; border-top: 1px solid var(--rule); }
 .step:last-child { border-bottom: 1px solid var(--rule); }
-.step::before { content: counter(step); grid-row: 1 / span 2; font-stretch: 125%; font-weight: 300; font-size: 1.5rem; line-height: 1.2; color: var(--brass); }
-.step-t { font-stretch: 112%; font-weight: 400; font-size: 1.1875rem; line-height: 1.3; }
+.step::before { content: counter(step); grid-row: 1 / span 2; font-stretch: var(--wide); font-weight: var(--wide-weight); font-size: 1.5rem; line-height: 1.2; color: var(--brass); }
+.step-t { font-stretch: var(--semi); font-weight: 400; font-size: 1.1875rem; line-height: 1.3; }
 .step p { grid-column: 2; color: var(--slate); }
 
 /* ───────── Service page close ───────── */
@@ -569,14 +575,14 @@ button { font: inherit; color: inherit; }
 .other { display: block; }
 .other-img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; transition: opacity 0.2s ease; }
 .other:hover .other-img { opacity: 0.86; }
-.other-name { display: block; margin-top: 0.9rem; font-stretch: 125%; font-weight: 300; font-size: 1.5rem; letter-spacing: -0.018em; line-height: 1.15; }
+.other-name { display: block; margin-top: 0.9rem; font-stretch: var(--wide); font-weight: var(--wide-weight); font-size: 1.5rem; letter-spacing: -0.018em; line-height: 1.15; }
 .other:hover .other-name { color: var(--gold-lit); }
 .other-sub { display: block; margin-top: 0.3rem; color: var(--plaster-dim); font-size: 0.9375rem; }
 
 /* ───────── Legal ───────── */
 
 .legal { max-width: calc(44rem + var(--gutter) * 2); margin-left: 0; }
-.legal h2 { font-stretch: 112%; font-weight: 500; font-size: 1.25rem; margin: 2.25rem 0 0.6rem; }
+.legal h2 { font-stretch: var(--semi); font-weight: 500; font-size: 1.25rem; margin: 2.25rem 0 0.6rem; }
 .legal p, .legal ul { margin-bottom: 1rem; }
 .legal ul { list-style: disc; padding-left: 1.25rem; }
 .legal li { margin-bottom: 0.35rem; }
@@ -588,7 +594,7 @@ button { font: inherit; color: inherit; }
 .site-footer { background: var(--night); color: var(--plaster); padding-top: clamp(3.5rem, 6vw, 5.5rem); }
 .footer-grid { display: grid; gap: 2.5rem; }
 .footer-mark { height: 3.25rem; width: auto; }
-.footer-name { margin-top: 1rem; font-stretch: 125%; font-size: 1.125rem; }
+.footer-name { margin-top: 1rem; font-stretch: var(--wide); font-size: 1.125rem; }
 .footer-note { margin-top: 0.5rem; max-width: 20em; color: var(--plaster-dim); font-size: 0.9375rem; }
 .footer-h { font-size: 0.9375rem; font-weight: 500; color: var(--plaster-dim); margin-bottom: 0.5rem; }
 .footer-list a { display: inline-flex; align-items: center; min-height: 2.75rem; word-break: break-word; }

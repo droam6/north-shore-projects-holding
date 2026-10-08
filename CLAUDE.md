@@ -26,7 +26,7 @@ One website for four sister businesses: North Shore Tiling, North Shore Painting
 
 ## Design
 - Navy `#1A1A2E`, gold `#C19A6B` (from the logos), porcelain `#F1F2F4` for light sections. Tokens at the top of `styles.css`.
-- One typeface, Archivo (self-hosted, OFL): wide and light for headings (`font-stretch: 125%`, weight 300), normal width for text.
+- One typeface, Archivo (self-hosted, OFL). Headings are slightly wider and lighter than the text (`--wide: 106%`, weight 350, set at the top of `styles.css`). The first build used 125% and Jack found it too stretched; do not widen it again.
 - Square corners and a 6px gap between photos (`--grout`), like tiles.
 - One entrance animation on the site: the home hero. Nothing else animates on scroll.
 - Home hero: four service panels. On screens 1024px and wider the active panel is open and they advance every 6 seconds (Pause button, stops on hover and focus, off for reduced motion). Narrower screens get a row you swipe.
