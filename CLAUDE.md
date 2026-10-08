@@ -1,0 +1,44 @@
+# North Shore Projects — merged site
+
+One website for four sister businesses: North Shore Tiling, North Shore Painting, North Shore Cleaning, North Shore Removals. Each keeps its own domain and site; this one sits on northshoreprojects.com.au. Static HTML, no framework. Host: Cloudflare Pages, publish directory is the repo root, no build command.
+
+## How it is put together
+- `src/data.mjs` — every word, phone number, photo list, review and link. Edit content here.
+- `tools/build.mjs` — templates. `node tools/build.mjs` writes the ten `*.html` pages at the repo root. The output is committed. Never edit the `.html` files by hand.
+- `tools/images.mjs` — photo sizes, video copies (sound stripped), posters, logo marks, favicons. Needs `npm install` inside `tools/` (sharp) and ffmpeg. Run: `node tools/images.mjs <path to north-shore-tiling> <path to north-shore-painting>`. Output is committed (`images/work`, `images/marks`, `videos`, `src/media.json`).
+- `tools/check-links.mjs` — internal links, files and anchors.
+- `css/styles.css`, `js/main.js` — hand written, no libraries. Bump `V` in `build.mjs` after changing either.
+- Preview: `npx serve . -l 4200` (clean URLs on).
+- PowerShell on Windows: no `&&`.
+
+## Launch switch
+`node tools/build.mjs` = preview (every page `noindex`, `robots.txt` blocks all).
+`node tools/build.mjs --live` = indexable, writes `sitemap.xml`. Run it only when Jack says launch.
+
+## Content rules (hard)
+- Nothing goes on the site that the businesses have not said themselves or that has not been checked. No invented numbers, reviews, credentials or time promises.
+- Google ratings, counts and review excerpts come from each business's own Google listing (matched by phone and address). Excerpts are word for word. `reviewsCheckedOn` in `data.mjs` is shown on the page; update it whenever the numbers are re-read. Five stars are only drawn for a rating Google shows as 5.0.
+- Do not add any of these until Jack supplies them in writing: years in business, job counts, licence or insurance wording, guarantees, paint brands, prices, opening hours, ABN.
+- Removals is charged by the hour with a time estimate (their own FAQ), so it has its own steps. Do not promise removals customers a fixed or written quote.
+- Photos: real jobs only. The cleaning and removals pages borrow two photos from the Ashfield tiling job until those teams send their own. Never caption a borrowed photo as cleaning or removals work.
+- Not used on purpose: painting "project 7" photos (real estate agency watermark), tiling video 3 (caption about a delay), tiling video 5 (another account's story), the removals team photo (faces).
+- Copy: plain, sentence case, short. No eyebrow labels above headings, no stat counters, no icon card grids, no emoji, no arrows on links.
+
+## Design
+- Navy `#1A1A2E`, gold `#C19A6B` (from the logos), porcelain `#F1F2F4` for light sections. Tokens at the top of `styles.css`.
+- One typeface, Archivo (self-hosted, OFL): wide and light for headings (`font-stretch: 125%`, weight 300), normal width for text.
+- Square corners and a 6px gap between photos (`--grout`), like tiles.
+- One entrance animation on the site: the home hero. Nothing else animates on scroll.
+- Home hero: four service panels. On screens 1024px and wider the active panel is open and they advance every 6 seconds (Pause button, stops on hover and focus, off for reduced motion). Narrower screens get a row you swipe.
+
+## Enquiry form
+One form, tick boxes for the four teams. `js/main.js` posts once per ticked team to that team's existing Formspree endpoint, and once per team to the n8n lead log (`service` field routes it). If one send fails the others still go, the failed team stays ticked and the message gives that team's phone number.
+
+## What gets published
+Cloudflare publishes the repo root, so anything committed is reachable by URL. `_redirects` sends `/CLAUDE.md`, `/src/*`, `/tools/*` and the config files back to the home page. Keep client notes, to-do lists and anything unflattering out of the repo.
+
+## Open questions for the client
+Licence numbers for tiling and painting · which ABN this site carries · the four Instagram handles · photos for cleaning and removals · opening hours.
+
+## Workflow
+Branch `merge` is the review branch. `main` is the live "coming soon" page: do not merge to or touch `main` until Jack approves. Before any push: `node tools/build.mjs`, `node tools/check-links.mjs`, `npx html-validate "*.html"`, and look at phone-width screenshots.

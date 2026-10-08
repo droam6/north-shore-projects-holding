@@ -1,0 +1,13 @@
+{
+  "name": "north-shore-projects-tools",
+  "private": true,
+  "type": "module",
+  "description": "Dev scripts only. Nothing here is needed to serve the site.",
+  "scripts": {
+    "build": "node build.mjs",
+    "images": "node images.mjs"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.0"
+  }
+}

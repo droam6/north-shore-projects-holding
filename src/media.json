@@ -1,0 +1,320 @@
+{
+  "photos": {
+    "croydon-vanity-evening": {
+      "w": 1600,
+      "h": 1066,
+      "widths": [
+        640,
+        1200,
+        1600
+      ],
+      "ratio": 1.5009
+    },
+    "croydon-vanity-mirror": {
+      "w": 1600,
+      "h": 1066,
+      "widths": [
+        640,
+        1200,
+        1600
+      ],
+      "ratio": 1.5009
+    },
+    "croydon-basin": {
+      "w": 1600,
+      "h": 1066,
+      "widths": [
+        640,
+        1200,
+        1600
+      ],
+      "ratio": 1.5009
+    },
+    "croydon-walnut-vanity": {
+      "w": 1600,
+      "h": 1066,
+      "widths": [
+        640,
+        1200,
+        1600
+      ],
+      "ratio": 1.5009
+    },
+    "croydon-bathroom": {
+      "w": 1600,
+      "h": 1066,
+      "widths": [
+        640,
+        1200,
+        1600
+      ],
+      "ratio": 1.5009
+    },
+    "croydon-bath": {
+      "w": 1066,
+      "h": 1600,
+      "widths": [
+        640,
+        1066
+      ],
+      "ratio": 0.6663
+    },
+    "croydon-shower": {
+      "w": 1066,
+      "h": 1600,
+      "widths": [
+        640,
+        1066
+      ],
+      "ratio": 0.6663
+    },
+    "croydon-full-view": {
+      "w": 1066,
+      "h": 1600,
+      "widths": [
+        640,
+        1066
+      ],
+      "ratio": 0.6663
+    },
+    "marble-1": {
+      "w": 1200,
+      "h": 1600,
+      "widths": [
+        640,
+        1200
+      ],
+      "ratio": 0.75
+    },
+    "marble-2": {
+      "w": 1200,
+      "h": 1600,
+      "widths": [
+        640,
+        1200
+      ],
+      "ratio": 0.75
+    },
+    "marble-3": {
+      "w": 1200,
+      "h": 1600,
+      "widths": [
+        640,
+        1200
+      ],
+      "ratio": 0.75
+    },
+    "marble-4": {
+      "w": 1200,
+      "h": 1600,
+      "widths": [
+        640,
+        1200
+      ],
+      "ratio": 0.75
+    },
+    "marble-5": {
+      "w": 1200,
+      "h": 1600,
+      "widths": [
+        640,
+        1200
+      ],
+      "ratio": 0.75
+    },
+    "ashfield-bathroom": {
+      "w": 1600,
+      "h": 1066,
+      "widths": [
+        640,
+        1200,
+        1600
+      ],
+      "ratio": 1.5009
+    },
+    "ashfield-shower": {
+      "w": 1600,
+      "h": 1066,
+      "widths": [
+        640,
+        1200,
+        1600
+      ],
+      "ratio": 1.5009
+    },
+    "ashfield-wall": {
+      "w": 1600,
+      "h": 1066,
+      "widths": [
+        640,
+        1200,
+        1600
+      ],
+      "ratio": 1.5009
+    },
+    "ashfield-corner": {
+      "w": 1600,
+      "h": 1066,
+      "widths": [
+        640,
+        1200,
+        1600
+      ],
+      "ratio": 1.5009
+    },
+    "ashfield-vanity": {
+      "w": 1066,
+      "h": 1600,
+      "widths": [
+        640,
+        1066
+      ],
+      "ratio": 0.6663
+    },
+    "ashfield-kitchen": {
+      "w": 1600,
+      "h": 1066,
+      "widths": [
+        640,
+        1200,
+        1600
+      ],
+      "ratio": 1.5009
+    },
+    "ashfield-splashback": {
+      "w": 1600,
+      "h": 1066,
+      "widths": [
+        640,
+        1200,
+        1600
+      ],
+      "ratio": 1.5009
+    },
+    "ashfield-sink": {
+      "w": 1600,
+      "h": 1066,
+      "widths": [
+        640,
+        1200,
+        1600
+      ],
+      "ratio": 1.5009
+    },
+    "ashfield-bedroom": {
+      "w": 1600,
+      "h": 1066,
+      "widths": [
+        640,
+        1200,
+        1600
+      ],
+      "ratio": 1.5009
+    },
+    "ashfield-living": {
+      "w": 1600,
+      "h": 1066,
+      "widths": [
+        640,
+        1200,
+        1600
+      ],
+      "ratio": 1.5009
+    },
+    "ashfield-living-wide": {
+      "w": 1600,
+      "h": 1066,
+      "widths": [
+        640,
+        1200,
+        1600
+      ],
+      "ratio": 1.5009
+    },
+    "paint-open-plan": {
+      "w": 5120,
+      "h": 3413,
+      "widths": [
+        640,
+        1200,
+        1800
+      ],
+      "ratio": 1.5001
+    },
+    "paint-living": {
+      "w": 5120,
+      "h": 3413,
+      "widths": [
+        640,
+        1200,
+        1800
+      ],
+      "ratio": 1.5001
+    },
+    "paint-lounge": {
+      "w": 5120,
+      "h": 3413,
+      "widths": [
+        640,
+        1200,
+        1800
+      ],
+      "ratio": 1.5001
+    },
+    "paint-kitchen": {
+      "w": 5120,
+      "h": 3413,
+      "widths": [
+        640,
+        1200,
+        1800
+      ],
+      "ratio": 1.5001
+    },
+    "paint-bedroom": {
+      "w": 5120,
+      "h": 3413,
+      "widths": [
+        640,
+        1200,
+        1800
+      ],
+      "ratio": 1.5001
+    }
+  },
+  "videos": {
+    "marble-clip-1": {
+      "w": 480,
+      "h": 848
+    },
+    "marble-clip-2": {
+      "w": 480,
+      "h": 848
+    },
+    "marble-clip-4": {
+      "w": 464,
+      "h": 832
+    },
+    "ashfield-clip": {
+      "w": 720,
+      "h": 1280
+    }
+  },
+  "marks": {
+    "projects": {
+      "ratio": 1.5117
+    },
+    "tiling": {
+      "ratio": 1.5473
+    },
+    "painting": {
+      "ratio": 1.5342
+    },
+    "cleaning": {
+      "ratio": 1.5242
+    },
+    "removals": {
+      "ratio": 1.6418
+    }
+  }
+}
