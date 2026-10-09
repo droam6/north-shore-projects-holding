@@ -266,55 +266,84 @@ button { font: inherit; color: inherit; }
 .panel-bar { display: none; }
 .panels-pause { display: none; }
 
-/* Wider screens: the active panel opens, the rest wait as slices. */
+/* Wider screens: the hero fills the first screen, photos on top, taking whatever height
+   the headline band leaves. */
 @media (min-width: 64rem) {
-  /* The hero fills the first screen: photos on top, taking whatever height the headline band leaves. */
   .hero { display: flex; flex-direction: column-reverse; padding-top: 0; min-height: min(calc(100svh - var(--header-h)), 64rem); }
   .hero-top { align-items: center; padding-block: clamp(1.75rem, 2.6vw, 2.5rem); }
   .hero-h { font-size: clamp(2rem, 2.75vw, 2.75rem); }
   .panels-wrap { flex: 1; display: flex; padding-top: var(--grout); padding-bottom: 0; }
-  .panels { flex: 1; overflow: hidden; margin-inline: 0; padding-inline: 0; min-height: 17rem; }
-  .panel { flex: 1 1 0; min-width: 0; height: auto; transition: flex-grow 0.9s var(--ease); }
-  .panel.is-active { flex-grow: 4.6; }
-  .panel-img { left: 50%; width: 64vw; max-width: none; transform: translateX(-50%); transition: filter 0.6s ease; filter: brightness(0.7) saturate(0.85); }
-  .panel.is-active .panel-img { filter: none; }
-  .panel-label { left: clamp(0.9rem, 1.5vw, 1.5rem); right: 0.75rem; bottom: 1.5rem; }
-  .panel-name { font-size: clamp(1.0625rem, 1.55vw, 1.75rem); transition: font-size 0.5s var(--ease); }
-  .panel.is-active .panel-name { font-size: clamp(2rem, 3.2vw, 3rem); }
-  .panel-sub { position: absolute; left: 0; top: 100%; width: 30rem; max-width: 44vw; opacity: 0; transition: opacity 0.3s ease; }
-  .panel.is-active .panel-label { bottom: 3.6rem; }
-  .panel.is-active .panel-sub { opacity: 1; transition-delay: 0.35s; }
-  .panel-bar { display: block; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; z-index: 2; background: var(--gold); transform: scaleX(0); transform-origin: left; }
-  .panels.is-running .panel.is-active .panel-bar { animation: bar var(--dwell, 6s) linear forwards; }
-  .panels.is-held .panel.is-active .panel-bar { animation-play-state: paused; }
+  .panels { flex: 1; min-height: 17rem; }
+}
 
-  .panels-pause {
-    position: absolute; right: calc(var(--grout) + 1rem); top: 1rem; z-index: 3;
-    display: none; align-items: center; gap: 0.55rem;
-    min-height: 2.75rem; padding: 0 0.95rem;
-    background: rgba(16, 16, 29, 0.72); border: 1px solid var(--rule-navy); cursor: pointer;
-    font-size: 0.875rem; font-weight: 500;
+/* The slider: the active panel is open, the rest wait as slices.
+   Every panel is the full open width and they overlap like a fanned deck, so opening one
+   only slides panels sideways. Nothing is resized while it moves: only transform and
+   opacity change, which the browser can animate without redoing the layout. (The first
+   version animated flex-grow, a filter and a font size, and it stuttered.)
+   Browsers without container units keep the swipe row. */
+@media (min-width: 64rem) {
+  @supports (width: 1cqw) {
+    .panels { display: block; position: relative; overflow: hidden; margin-inline: 0; padding-inline: 0; container-type: inline-size; }
+    .panel {
+      --s: calc((100cqw - 3 * var(--grout)) / 7.6);             /* width of a waiting slice */
+      --a: calc(100cqw - 3 * var(--s) - 3 * var(--grout));      /* width of the open panel */
+      --x: calc(var(--i) * (var(--s) + var(--grout)));          /* resting place, counted from the left */
+      position: absolute; top: 0; bottom: 0; left: 0; width: var(--a); height: auto;
+      z-index: calc(var(--i) + 1);
+      transform: translate3d(var(--x), 0, 0);
+      transition: transform 0.8s var(--ease);
+      box-shadow: calc(var(--grout) * -1) 0 0 var(--navy);       /* the grout line on its left */
+    }
+    /* Everything to the right of the open panel moves over by the extra width. */
+    .panel.is-active ~ .panel { transform: translate3d(calc(var(--x) + var(--a) - var(--s)), 0, 0); }
+
+    /* A waiting slice shows the middle of its photo; it slides to rest as the panel opens. */
+    .panel-img { transform: translate3d(calc((var(--s) - var(--a)) / 2), 0, 0); transition: transform 0.8s var(--ease); }
+    .panel.is-active .panel-img { transform: translate3d(0, 0, 0); }
+
+    /* Waiting slices are dimmed by a layer on top, not by filtering the photo. */
+    .panel::after { content: ""; position: absolute; inset: 0; background: var(--night); opacity: 0.36; pointer-events: none; transition: opacity 0.6s ease; }
+    .panel.is-active::after { opacity: 0; }
+
+    .panel-label { left: clamp(0.9rem, 1.5vw, 1.5rem); right: auto; bottom: 1.5rem; width: calc(var(--a) - 3rem); transform: translate3d(0, 1.7rem, 0); transition: transform 0.6s var(--ease); }
+    .panel.is-active .panel-label { transform: translate3d(0, 0, 0); }
+    .panel-name { font-size: clamp(2rem, 3.2vw, 3rem); transform: scale(0.56); transform-origin: left bottom; transition: transform 0.6s var(--ease); }
+    .panel.is-active .panel-name { transform: scale(1); }
+    .panel-sub { white-space: nowrap; opacity: 0; transition: opacity 0.3s ease; }
+    .panel.is-active .panel-sub { opacity: 1; transition-delay: 0.35s; }
+    .panel-bar { display: block; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; z-index: 2; background: var(--gold); transform: scaleX(0); transform-origin: left; }
+    .panels.is-running .panel.is-active .panel-bar { animation: bar var(--dwell, 6s) linear forwards; }
+    .panels.is-held .panel.is-active .panel-bar { animation-play-state: paused; }
+
+    .panels-pause {
+      position: absolute; right: calc(var(--grout) + 1rem); top: calc(var(--grout) + 1rem); z-index: 6;
+      display: none; align-items: center; gap: 0.55rem;
+      min-height: 2.75rem; padding: 0 0.95rem;
+      background: rgba(16, 16, 29, 0.72); border: 1px solid var(--rule-navy); cursor: pointer;
+      font-size: 0.875rem; font-weight: 500;
+    }
+    .js .panels-pause { display: inline-flex; }
+    .panels-pause svg { width: 0.7rem; height: 0.8rem; }
+    .pp-play { display: none; }
+    .panels-pause[aria-pressed="true"] .pp-play { display: inline-flex; }
+    .panels-pause[aria-pressed="true"] .pp-pause { display: none; }
+    .pp-pause { display: inline-flex; }
   }
-  .js .panels-pause { display: inline-flex; }
-  .panels-pause svg { width: 0.7rem; height: 0.8rem; }
-  .pp-play { display: none; }
-  .panels-pause[aria-pressed="true"] .pp-play { display: inline-flex; }
-  .panels-pause[aria-pressed="true"] .pp-pause { display: none; }
-  .pp-pause { display: inline-flex; }
 }
 @keyframes bar { to { transform: scaleX(1); } }
 
-/* The one entrance on the site: the panels open left to right, then the headline settles. */
+/* The one entrance on the site: the panels fade in left to right, then the headline settles. */
 @media (prefers-reduced-motion: no-preference) {
   .hero-main { animation: settle 0.9s var(--ease) 0.3s both; }
   .hero-side { animation: settle 0.9s var(--ease) 0.42s both; }
-  .panel { animation: open 1s var(--ease) both; }
+  .panel { animation: appear 0.9s ease both; }
   .panel:nth-child(2) { animation-delay: 0.08s; }
   .panel:nth-child(3) { animation-delay: 0.16s; }
   .panel:nth-child(4) { animation-delay: 0.24s; }
 }
 @keyframes settle { from { opacity: 0; transform: translateY(0.75rem); } to { opacity: 1; transform: none; } }
-@keyframes open { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes appear { from { opacity: 0; } to { opacity: 1; } }
 
 /* ───────── Sections ───────── */
 

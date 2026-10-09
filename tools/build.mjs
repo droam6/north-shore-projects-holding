@@ -11,7 +11,7 @@ import { site, services, photos, projects, homeSlides, clips, suburbs, steps, re
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const media = JSON.parse(readFileSync(join(root, 'src/media.json'), 'utf8'));
 const LIVE = !process.argv.includes('--preview');
-const V = '5'; // bump to bust the CSS/JS cache after a change
+const V = '6'; // bump to bust the CSS/JS cache after a change
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const svc = (id) => services.find((s) => s.id === id);
@@ -427,7 +427,7 @@ ${allFive ? `      <p class="hero-rating"><a href="#reviews">${stars('5.0')}<spa
   </div>
   <div class="panels-wrap">
     <ul class="panels" data-panels>
-${services.map((s, i) => `      <li class="panel${i === 0 ? ' is-active' : ''}" data-panel>
+${services.map((s, i) => `      <li class="panel${i === 0 ? ' is-active' : ''}" style="--i:${i}" data-panel>
         <a class="panel-link" href="/${s.id}">
           ${img(s.photo, { sizes: '(min-width: 48rem) 62vw, 82vw', cls: 'panel-img', priority: i === 0, lazy: false, alt: '' })}
           <span class="panel-label">

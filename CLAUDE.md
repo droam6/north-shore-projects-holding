@@ -37,6 +37,7 @@ The site is live on northshoreprojects.com.au. Jack published it himself by fast
 - Square corners and a 6px gap between photos (`--grout`), like tiles.
 - One entrance animation on the site: the home hero. Nothing else animates on scroll.
 - Home hero: four service panels. On screens 1024px and wider the panels sit directly under the header and fill most of the first screen, with the headline, rating and buttons in a band beneath them (Jack found headline-first "blank"). The active panel is open and they advance every 6 seconds (Pause button, stops on hover and focus, off for reduced motion). Narrower screens get the headline first, then a row you swipe.
+- The hero slider must only animate `transform` and `opacity`. Every panel is the full open width and they overlap, so opening one just slides panels sideways (widths come from container units, `cqw`). The first version animated `flex-grow`, a `filter` on the photos and a font size; it re-drew the photos every frame and Jack saw it stutter. Do not bring those back.
 - Wide screens: the content column is 84rem, the root font size scales up a little past about 1500px (18px at 2560px), and full-width rows (header, menus, photo rows) use `--edge` so they line up with the content column.
 
 ## Enquiry form
