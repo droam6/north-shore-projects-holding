@@ -22,15 +22,15 @@ One website for four sister businesses: North Shore Tiling, North Shore Painting
 - Removals is charged by the hour with a time estimate (their own FAQ), so it has its own steps. Do not promise removals customers a fixed or written quote.
 - Photos: real jobs only. The cleaning and removals pages borrow two photos from the Ashfield tiling job until those teams send their own. Never caption a borrowed photo as cleaning or removals work.
 - Not used on purpose: painting "project 7" photos (real estate agency watermark), tiling video 3 (caption about a delay), tiling video 5 (another account's story), the removals team photo (faces).
-- Copy: plain, sentence case, short. No eyebrow labels above headings, no stat counters, no icon card grids, no emoji, no arrows on links.
+- Copy: plain, sentence case, short (the menu, buttons and footer headings are set in capitals by CSS; write them in sentence case). No eyebrow labels above headings, no stat counters, no icon card grids, no emoji, no arrows on links.
 
 ## Design
-- Navy `#1A1A2E`, gold `#C19A6B` (from the logos), porcelain `#F1F2F4` for light sections. Tokens at the top of `styles.css`.
-- One typeface, Archivo (self-hosted, OFL). Headings are slightly wider and lighter than the text (`--wide: 106%`, weight 350, set at the top of `styles.css`). The first build used 125% and Jack found it too stretched; do not widen it again.
+- Navy `#1A1A2E`, gold `#C19A6B` (from the logos), cream `#FAFAF8` for light sections (the service sites' cream). Tokens at the top of `styles.css`.
+- Type is the same family as the four service sites, so the group reads as one brand: DM Serif Display for headings, DM Sans for text (both self-hosted, OFL), and small spaced capitals for the menu, buttons and footer headings only (`--caps-size`, `--caps-track`). Text stays small and quiet: body 1rem, quotes and lists about 1.06rem. The first build used one light sans (Archivo) at large sizes; Jack found it cheaper-looking than northshoretiles. Do not go back to it.
 - Square corners and a 6px gap between photos (`--grout`), like tiles.
 - One entrance animation on the site: the home hero. Nothing else animates on scroll.
 - Home hero: four service panels. On screens 1024px and wider the panels sit directly under the header and fill most of the first screen, with the headline, rating and buttons in a band beneath them (Jack found headline-first "blank"). The active panel is open and they advance every 6 seconds (Pause button, stops on hover and focus, off for reduced motion). Narrower screens get the headline first, then a row you swipe.
-- Wide screens: the root font size scales up past about 1500px, and full-width rows (header, menus, photo rows) use `--edge` so they line up with the content column.
+- Wide screens: the content column is 84rem, the root font size scales up a little past about 1500px (18px at 2560px), and full-width rows (header, menus, photo rows) use `--edge` so they line up with the content column.
 
 ## Enquiry form
 One form, tick boxes for the four teams. `js/main.js` posts once per ticked team to that team's existing Formspree endpoint, and once per team to the n8n lead log (`service` field routes it). If one send fails the others still go, the failed team stays ticked and the message gives that team's phone number.

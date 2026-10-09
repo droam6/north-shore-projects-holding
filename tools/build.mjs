@@ -10,7 +10,7 @@ import { site, services, photos, projects, homeSlides, clips, suburbs, steps, re
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const media = JSON.parse(readFileSync(join(root, 'src/media.json'), 'utf8'));
 const LIVE = process.argv.includes('--live');
-const V = '3'; // bump to bust the CSS/JS cache after a change
+const V = '4'; // bump to bust the CSS/JS cache after a change
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const svc = (id) => services.find((s) => s.id === id);
@@ -201,7 +201,8 @@ function page({ path, title, description, body, bodyClass = '', ogImage = '/imag
 <link rel="icon" href="/images/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="/images/favicon-192.png" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-<link rel="preload" href="/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/dm-serif-display-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/dm-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/css/styles.css?v=${V}">
 <script>document.documentElement.classList.add('js')</script>${ld}
 </head>
@@ -304,7 +305,7 @@ function reviewsSection() {
     <ul class="ratings">
 ${byCount.map((s) => `      <li class="rating">
         <span class="rating-team">${esc(s.business)}</span>
-        <span class="rating-score">${s.google.rating} out of 5</span>
+        <span class="rating-score">${stars(s.google.rating)}<span>${s.google.rating} out of 5</span></span>
         <span class="rating-count">${s.google.count} review${s.google.count === 1 ? '' : 's'}</span>
         <a class="link rating-link" href="${esc(s.google.url)}" rel="noopener">Read them on Google<span class="vh">: ${esc(s.business)}</span></a>
       </li>`).join('\n')}
@@ -316,7 +317,7 @@ ${quoteSlides(homeReviews)}
 
 function serviceReviews(s) {
   if (!s.google || !s.google.count || !s.reviews.length) return '';
-  return `<section class="section section--porcelain${s.clips ? '' : ' section--flush'}" aria-labelledby="sreviews-h">
+  return `<section class="section section--cream${s.clips ? '' : ' section--flush'}" aria-labelledby="sreviews-h">
   <div class="wrap section-head">
     <h2 class="h2" id="sreviews-h">${s.google.rating} on Google from ${s.google.count} review${s.google.count === 1 ? '' : 's'}</h2>
     <p class="section-aside">Read on ${reviewsCheckedOn}. These are excerpts, word for word. <a class="link" href="${esc(s.google.url)}" rel="noopener">See them all on Google</a></p>
@@ -434,7 +435,7 @@ ${services.map((s, i) => `      <li class="panel${i === 0 ? ' is-active' : ''}" 
   </div>
 </section>
 
-<section class="section section--porcelain" aria-labelledby="work-h">
+<section class="section section--cream" aria-labelledby="work-h">
   <div class="wrap section-head">
     <h2 class="h2" id="work-h">Recent projects</h2>
     <p class="section-aside">Finished jobs from the tiling and painting teams. <a class="link" href="/projects">All projects</a></p>
@@ -444,7 +445,7 @@ ${carousel({ label: 'Recent projects', slides: homeSlides })}
 
 ${reviewsSection()}
 
-<section class="section section--porcelain" aria-labelledby="services-h">
+<section class="section section--cream" aria-labelledby="services-h">
   <div class="wrap">
     <h2 class="h2 index-h" id="services-h">What each team does</h2>
     <ul class="index">
@@ -477,7 +478,7 @@ ${socials()}
   </div>
 </section>
 
-<section class="section section--porcelain" id="areas" aria-labelledby="areas-h">
+<section class="section section--cream" id="areas" aria-labelledby="areas-h">
   <div class="wrap areas">
     <div>
       <h2 class="h2" id="areas-h">Where we work</h2>
@@ -501,7 +502,7 @@ ${enquirySection()}`;
 function servicePage(s) {
   const others = services.filter((o) => o.id !== s.id);
   const gallery = s.gallery.length
-    ? `<section class="section section--porcelain section--flush" aria-labelledby="gallery-h">
+    ? `<section class="section section--cream section--flush" aria-labelledby="gallery-h">
   <div class="wrap section-head">
     <h2 class="h2" id="gallery-h">Recent ${esc(s.name.toLowerCase())} work</h2>
     <p class="section-aside"><a class="link" href="/projects">All projects</a></p>
@@ -537,7 +538,7 @@ ${reels()}
   </div>
 </section>
 
-<section class="section section--porcelain" aria-labelledby="offers-h">
+<section class="section section--cream" aria-labelledby="offers-h">
   <div class="wrap offers">
     <h2 class="h2" id="offers-h">What we do</h2>
     <dl class="offer-list">
@@ -552,7 +553,7 @@ ${clipSection}
 
 ${serviceReviews(s)}
 
-<section class="section section--porcelain${(s.gallery.length && !s.clips) || serviceReviews(s) ? ' section--flush' : ''}" aria-labelledby="steps-h">
+<section class="section section--cream${(s.gallery.length && !s.clips) || serviceReviews(s) ? ' section--flush' : ''}" aria-labelledby="steps-h">
   <div class="wrap offers">
     <h2 class="h2" id="steps-h">${s.id === 'removals' ? 'How a move runs' : 'How a job runs'}</h2>
 ${stepsList(s.id === 'removals' ? removalsSteps : steps)}
@@ -596,7 +597,7 @@ function projectsPage() {
   </div>
 </section>
 
-${projects.map((p, i) => `<section class="section section--porcelain project${i ? ' section--flush' : ''}" id="${p.id}" aria-labelledby="${p.id}-h">
+${projects.map((p, i) => `<section class="section section--cream project${i ? ' section--flush' : ''}" id="${p.id}" aria-labelledby="${p.id}-h">
   <div class="wrap section-head">
     <h2 class="h2" id="${p.id}-h">${esc(p.title)}</h2>
     <p class="section-aside">${esc(p.text)} <a class="link" href="/${p.service}">${esc(svc(p.service).business)}</a></p>
@@ -646,7 +647,7 @@ ${enquiryForm({ idp: 'c' })}
   </div>
 </section>
 
-<section class="section section--porcelain" aria-labelledby="steps-h">
+<section class="section section--cream" aria-labelledby="steps-h">
   <div class="wrap offers">
     <h2 class="h2" id="steps-h">What happens next</h2>
 ${stepsList(sharedSteps)}
@@ -666,7 +667,7 @@ function legalPage({ path, title, h1, description, html }) {
     <h1 class="h1" id="page-h">${esc(h1)}</h1>
   </div>
 </section>
-<section class="section section--porcelain">
+<section class="section section--cream">
   <div class="wrap legal">
 ${html}
   </div>
