@@ -11,9 +11,10 @@ One website for four sister businesses: North Shore Tiling, North Shore Painting
 - Preview: `npx serve . -l 4200` (clean URLs on).
 - PowerShell on Windows: no `&&`.
 
-## Launch switch
-`node tools/build.mjs` = preview (every page `noindex`, `robots.txt` blocks all).
-`node tools/build.mjs --live` = indexable, writes `sitemap.xml`. Run it only when Jack says launch.
+## Live since 9 Oct 2026
+The site is live on northshoreprojects.com.au. Jack published it himself by fast-forwarding `main` to `merge`.
+`node tools/build.mjs` = the public build (indexable, writes `sitemap.xml`). This is the default.
+`node tools/build.mjs --preview` = `noindex` on every page and `robots.txt` blocks all. Never let a preview build reach `main`: it would take the live site out of search.
 
 ## Content rules (hard)
 - Nothing goes on the site that the businesses have not said themselves or that has not been checked. No invented numbers, reviews, credentials or time promises.
@@ -48,4 +49,4 @@ Cloudflare publishes the repo root, so anything committed is reachable by URL. `
 Licence numbers for tiling and painting · which ABN this site carries · the four Instagram handles · photos for cleaning and removals · opening hours.
 
 ## Workflow
-Branch `merge` is the review branch. `main` is the live "coming soon" page: do not merge to or touch `main` until Jack approves. Before any push: `node tools/build.mjs`, `node tools/check-links.mjs`, `npx html-validate "*.html"`, and look at phone-width screenshots.
+Branch `merge` is the review branch. `main` is the live site: Cloudflare publishes every push to it. Work on `merge`, show Jack, and he publishes (PowerShell, in his clone): `git fetch origin`, `git checkout main`, `git merge --ff-only origin/merge`, `git push origin main`, `git checkout merge`. Before any push: `node tools/build.mjs`, `node tools/check-links.mjs`, `npx html-validate "*.html"`, and look at phone-width screenshots.

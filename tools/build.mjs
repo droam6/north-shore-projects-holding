@@ -1,6 +1,7 @@
 // Builds every page from src/data.mjs. No dependencies.
-//   node tools/build.mjs            preview build (noindex, robots.txt blocks everything)
-//   node tools/build.mjs --live     launch build (indexable, sitemap.xml written)
+//   node tools/build.mjs             the public build (indexable, sitemap.xml written)
+//   node tools/build.mjs --preview   noindex build, robots.txt blocks everything
+// The site is live, so the public build is the default: a preview build must never reach main.
 // The output (*.html at the repo root) is committed: Cloudflare Pages serves the repo as it is.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -9,7 +10,7 @@ import { site, services, photos, projects, homeSlides, clips, suburbs, steps, re
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const media = JSON.parse(readFileSync(join(root, 'src/media.json'), 'utf8'));
-const LIVE = process.argv.includes('--live');
+const LIVE = !process.argv.includes('--preview');
 const V = '5'; // bump to bust the CSS/JS cache after a change
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
