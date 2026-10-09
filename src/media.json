@@ -301,9 +301,6 @@
     }
   },
   "marks": {
-    "projects": {
-      "ratio": 1.5117
-    },
     "tiling": {
       "ratio": 1.5473
     },
@@ -316,5 +313,8 @@
     "removals": {
       "ratio": 1.6418
     }
+  },
+  "brand": {
+    "ratio": 3.967
   }
 }

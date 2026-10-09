@@ -24,8 +24,14 @@ One website for four sister businesses: North Shore Tiling, North Shore Painting
 - Not used on purpose: painting "project 7" photos (real estate agency watermark), tiling video 3 (caption about a delay), tiling video 5 (another account's story), the removals team photo (faces).
 - Copy: plain, sentence case, short (the menu, buttons and footer headings are set in capitals by CSS; write them in sentence case). No eyebrow labels above headings, no stat counters, no icon card grids, no emoji, no arrows on links.
 
+## Logo
+- The North Shore Projects logo is the white buildings symbol with the "NORTH SHORE PROJECTS" lettering, supplied by Jack on 9 Oct 2026 (`images/logos/north-shore-projects-logo.jpg`, white on black). `node tools/logo.mjs` turns the black into transparency and writes `images/brand/logo-*.png` and the favicons.
+- Use it as supplied: white, symbol and lettering together, on navy only. Do not recolour it, redraw it or set the name in a site font beside it. Jack's instruction with it: do not change the site's colours or fonts to match it.
+- It is in the header, footer, favicons and share image. The four gold house marks (`images/marks`) are the service teams' own logos and stay.
+- The supplied file is a JPG. Ask for the vector or a transparent PNG before launch.
+
 ## Design
-- Navy `#1A1A2E`, gold `#C19A6B` (from the logos), cream `#FAFAF8` for light sections (the service sites' cream). Tokens at the top of `styles.css`.
+- Navy `#1A1A2E`, gold `#C19A6B` (from the service logos), cream `#FAFAF8` for light sections (the service sites' cream). Tokens at the top of `styles.css`.
 - Type is the same family as the four service sites, so the group reads as one brand: DM Serif Display for headings, DM Sans for text (both self-hosted, OFL), and small spaced capitals for the menu, buttons and footer headings only (`--caps-size`, `--caps-track`). Text stays small and quiet: body 1rem, quotes and lists about 1.06rem. The first build used one light sans (Archivo) at large sizes; Jack found it cheaper-looking than northshoretiles. Do not go back to it.
 - Square corners and a 6px gap between photos (`--grout`), like tiles.
 - One entrance animation on the site: the home hero. Nothing else animates on scroll.

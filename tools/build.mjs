@@ -10,7 +10,7 @@ import { site, services, photos, projects, homeSlides, clips, suburbs, steps, re
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const media = JSON.parse(readFileSync(join(root, 'src/media.json'), 'utf8'));
 const LIVE = process.argv.includes('--live');
-const V = '4'; // bump to bust the CSS/JS cache after a change
+const V = '5'; // bump to bust the CSS/JS cache after a change
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const svc = (id) => services.find((s) => s.id === id);
@@ -31,6 +31,12 @@ function img(id, { sizes, cls = '', lazy = true, priority = false, alt } = {}) {
 const mark = (id, h, cls = 'mark') => {
   const w = Math.round(h * media.marks[id].ratio);
   return `<img src="/images/marks/${id}-96.png" srcset="/images/marks/${id}-96.png 1x, /images/marks/${id}-240.png 2.5x" width="${w}" height="${h}" alt="" class="${cls}">`;
+};
+
+// The North Shore Projects logo: symbol and lettering together, white, as supplied.
+const logo = (h, cls) => {
+  const w = Math.round(h * media.brand.ratio);
+  return `<img src="/images/brand/logo-112.png" srcset="/images/brand/logo-112.png 1x, /images/brand/logo-224.png 2x" width="${w}" height="${h}" alt="North Shore Projects" class="${cls}">`;
 };
 
 const chevron = '<svg class="chev" width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.4"/></svg>';
@@ -57,8 +63,7 @@ function header(current) {
 <header class="site-header" data-header>
   <div class="header-in">
     <a class="brand" href="/"${current === '/' ? ' aria-current="page"' : ''}>
-      ${mark('projects', 36, 'brand-mark')}
-      <span class="brand-name">North Shore Projects</span>
+      ${logo(52, 'brand-logo')}
     </a>
     <nav class="nav" aria-label="Main">
       <ul class="nav-list">
@@ -122,14 +127,13 @@ function footer() {
   return `<footer class="site-footer">
   <div class="wrap footer-grid">
     <div class="footer-brand">
-      ${mark('projects', 56, 'footer-mark')}
-      <p class="footer-name">North Shore Projects</p>
+      ${logo(64, 'footer-logo')}
       <p class="footer-note">Tiling, painting, cleaning and removals on Sydney's North Shore.</p>
     </div>
     <div>
       <h2 class="footer-h">Services</h2>
       <ul class="footer-list">
-${services.map((s) => `        <li><a href="/${s.id}">${esc(s.fullName)}</a></li>`).join('\n')}
+${services.map((s) => `        <li><a href="/${s.id}">${esc(s.name)}</a></li>`).join('\n')}
         <li><a href="/projects">Projects</a></li>
       </ul>
     </div>
@@ -155,12 +159,14 @@ ${services.map((s) => `        <li><a href="${s.websiteHref}" rel="noopener">${s
       </ul>
     </div>
   </div>
-  <div class="wrap footer-base">
-    <p>&copy; 2026 North Shore Projects</p>
-    <ul class="footer-legal">
-      <li><a href="/privacy">Privacy policy</a></li>
-      <li><a href="/terms">Terms</a></li>
-    </ul>
+  <div class="wrap">
+    <div class="footer-base">
+      <p>&copy; 2026 North Shore Projects</p>
+      <ul class="footer-legal">
+        <li><a href="/privacy">Privacy policy</a></li>
+        <li><a href="/terms">Terms</a></li>
+      </ul>
+    </div>
   </div>
 </footer>`;
 }

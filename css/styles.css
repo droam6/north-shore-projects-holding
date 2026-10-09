@@ -89,6 +89,9 @@ button { font: inherit; color: inherit; }
 }
 .skip:focus { top: 1rem; }
 
+/* A slightly taller header on wide screens, so the logo lettering stays readable. */
+@media (min-width: 64rem) { :root { --header-h: 5rem; } }
+
 .wrap { width: 100%; max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter); }
 
 /* ───────── Type ───────── */
@@ -141,9 +144,10 @@ button { font: inherit; color: inherit; }
   padding-inline: var(--edge);
 }
 .brand { display: flex; align-items: center; gap: 0.75rem; margin-right: auto; min-height: 3rem; }
-.brand-mark { height: 2.125rem; width: auto; }
-.brand-name { font-family: var(--serif); font-weight: 400; font-size: 1.3125rem; white-space: nowrap; }
-@media (max-width: 23.5rem) { .brand { gap: 0.5rem; } .brand-mark { height: 1.75rem; } .brand-name { font-size: 0.8125rem; } }
+/* The logo is used as supplied: white, symbol and lettering together. */
+.brand-logo { height: 2.625rem; width: auto; }
+@media (max-width: 23.5rem) { .brand-logo { height: 2.25rem; } }
+@media (min-width: 64rem) { .brand-logo { height: 3.125rem; } }
 
 .nav { display: none; }
 .nav-list { display: flex; align-items: center; }
@@ -611,9 +615,8 @@ button { font: inherit; color: inherit; }
 
 .site-footer { background: var(--night); color: var(--plaster); padding-top: clamp(3.5rem, 6vw, 5.5rem); }
 .footer-grid { display: grid; gap: 2.5rem; }
-.footer-mark { height: 3.25rem; width: auto; }
-.footer-name { margin-top: 1rem; font-family: var(--serif); font-size: 1.375rem; }
-.footer-note { margin-top: 0.5rem; max-width: 20em; color: var(--plaster-dim); font-size: 0.9375rem; }
+.footer-logo { height: 4rem; width: auto; }
+.footer-note { margin-top: 1.25rem; max-width: 20em; color: var(--plaster-dim); font-size: 0.9375rem; }
 .footer-h { font-family: var(--sans); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
 .footer-list a { display: inline-flex; align-items: center; min-height: 2.75rem; word-break: break-word; }
 .footer-list a:hover { color: var(--gold-lit); }
@@ -624,7 +627,7 @@ button { font: inherit; color: inherit; }
 .footer-legal a:hover { color: var(--plaster); }
 @media (min-width: 40rem) { .footer-grid { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 64rem) { .footer-grid { grid-template-columns: repeat(3, 1fr); gap: 3rem; } .footer-brand { grid-column: 1 / -1; } }
-@media (min-width: 80rem) { .footer-grid { grid-template-columns: 1.25fr 1fr 1.2fr 1fr 1.05fr; gap: 2.5rem; } .footer-brand { grid-column: auto; } }
+@media (min-width: 80rem) { .footer-grid { grid-template-columns: 1.3fr 0.95fr 1.5fr 1fr 1.1fr; gap: 2.5rem; } .footer-brand { grid-column: auto; } }
 
 /* ───────── Reduced motion ───────── */
 

@@ -1,10 +1,11 @@
-// Makes the web sizes for photos, logo marks and video posters.
+// Makes the web sizes for photos, the four service logo marks and video posters.
+// (The North Shore Projects logo and the favicons are made by tools/logo.mjs.)
 // Usage: node tools/images.mjs <path to north-shore-tiling> <path to north-shore-painting>
 // The output in images/work, images/marks and videos is committed, so this only
 // needs re-running when photos are added or changed.
 import sharp from 'sharp';
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, writeFileSync, copyFileSync, existsSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -64,7 +65,6 @@ const videos = {
 const posterAt = { 'ashfield-clip': 5, 'marble-clip-1': 5, 'marble-clip-2': 5, 'marble-clip-4': 2 };
 
 const marks = {
-  projects: 'NSPLOGO-HD-FINAL.png',
   tiling: 'NSTLOGO-HD-FINAL.png',
   painting: 'NSPAINTLOGO-HD-FINAL.png',
   cleaning: 'NSCLOGO-HD-FINAL.png',
@@ -111,12 +111,11 @@ for (const [id, file] of Object.entries(marks)) {
   console.log('mark', id);
 }
 
-// Favicons from the existing gold mark.
-const fav = await sharp(join(root, 'images/favicon.png')).trim().toBuffer();
-for (const [name, size, pad] of [['favicon-32.png', 32, 2], ['favicon-192.png', 192, 20], ['apple-touch-icon.png', 180, 22]]) {
-  const inner = await sharp(fav).resize({ width: size - pad * 2, height: size - pad * 2, fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).toBuffer();
-  await sharp({ create: { width: size, height: size, channels: 4, background: '#1A1A2E' } })
-    .composite([{ input: inner, gravity: 'centre' }]).png().toFile(join(root, 'images', name));
+// Keep the logo entry that tools/logo.mjs wrote.
+const mediaPath = join(root, 'src/media.json');
+if (existsSync(mediaPath)) {
+  const old = JSON.parse(readFileSync(mediaPath, 'utf8'));
+  if (old.brand) manifest.brand = old.brand;
 }
 
 writeFileSync(join(root, 'src/media.json'), JSON.stringify(manifest, null, 2) + '\n');
