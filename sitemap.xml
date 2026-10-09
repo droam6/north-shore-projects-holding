@@ -1,2 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://northshoreprojects.com.au/</loc></url>
+  <url><loc>https://northshoreprojects.com.au/tiling</loc></url>
+  <url><loc>https://northshoreprojects.com.au/painting</loc></url>
+  <url><loc>https://northshoreprojects.com.au/cleaning</loc></url>
+  <url><loc>https://northshoreprojects.com.au/removals</loc></url>
+  <url><loc>https://northshoreprojects.com.au/projects</loc></url>
+  <url><loc>https://northshoreprojects.com.au/contact</loc></url>
+  <url><loc>https://northshoreprojects.com.au/privacy</loc></url>
+  <url><loc>https://northshoreprojects.com.au/terms</loc></url>
+</urlset>
