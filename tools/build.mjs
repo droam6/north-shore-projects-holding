@@ -11,7 +11,7 @@ import { site, services, photos, projects, homeSlides, clips, suburbs, steps, re
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const media = JSON.parse(readFileSync(join(root, 'src/media.json'), 'utf8'));
 const LIVE = !process.argv.includes('--preview');
-const V = '6'; // bump to bust the CSS/JS cache after a change
+const V = '7'; // bump to bust the CSS/JS cache after a change
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const svc = (id) => services.find((s) => s.id === id);
@@ -39,6 +39,9 @@ const logo = (h, cls) => {
   const w = Math.round(h * media.brand.ratio);
   return `<img src="/images/brand/logo-112.png" srcset="/images/brand/logo-112.png 1x, /images/brand/logo-224.png 2x" width="${w}" height="${h}" alt="North Shore Projects" class="${cls}">`;
 };
+
+// A link to a team's own website. Always a new tab, and it says so to screen readers.
+const siteLink = (s, text, cls = '') => `<a${cls ? ` class="${cls}"` : ''} href="${s.websiteHref}" target="_blank" rel="noopener">${text}<span class="vh"> (opens in a new tab)</span></a>`;
 
 const chevron = '<svg class="chev" width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.4"/></svg>';
 const arrowL = '<svg width="20" height="14" viewBox="0 0 20 14" fill="none" aria-hidden="true"><path d="M7.5 1L1.5 7l6 6M2 7h17" stroke="currentColor" stroke-width="1.5"/></svg>';
@@ -76,7 +79,8 @@ ${services.map((s) => `              <li><a class="menu-item" href="/${s.id}"${c
                 ${img(s.photo, { sizes: '(min-width: 64rem) 23vw, 50vw', cls: 'menu-photo', alt: '' })}
                 <span class="menu-name">${esc(s.fullName)}</span>
                 <span class="menu-sub">${esc(s.summary)}</span>
-              </a></li>`).join('\n')}
+              </a>
+              ${siteLink(s, s.website, 'menu-ext')}</li>`).join('\n')}
             </ul>
           </div>
         </li>
@@ -156,7 +160,7 @@ ${services.map((s) => `        <li><a href="https://www.instagram.com/${s.instag
     <div>
       <h2 class="footer-h">Each team's own site</h2>
       <ul class="footer-list">
-${services.map((s) => `        <li><a href="${s.websiteHref}" rel="noopener">${s.website}</a></li>`).join('\n')}
+${services.map((s) => `        <li>${siteLink(s, s.website)}</li>`).join('\n')}
       </ul>
     </div>
   </div>
@@ -467,6 +471,7 @@ ${s.offers.map(([n]) => `          <li>${esc(n)}</li>`).join('\n')}
         <p class="index-go">
           <a class="link" href="/${s.id}">About ${esc(s.name.toLowerCase())}</a>
           <a class="index-phone" href="tel:${s.phoneHref}">${s.phone}</a>
+          ${siteLink(s, s.website, 'index-site')}
         </p>
       </li>`).join('\n')}
     </ul>
@@ -536,6 +541,7 @@ ${reels()}
       <p class="lead">${esc(s.lead)}</p>
       <p class="actions">
         <a class="btn" href="/contact?service=${s.id}">Get a ${esc(s.name.toLowerCase())} quote</a>
+        ${siteLink(s, 'Visit ' + s.website, 'btn btn--line')}
         <a class="link" href="tel:${s.phoneHref}">Call ${s.phone}</a>
       </p>
     </div>
@@ -579,7 +585,7 @@ ${stepsList(s.id === 'removals' ? removalsSteps : steps)}
       <div><dt>Phone</dt><dd><a href="tel:${s.phoneHref}">${s.phone}</a></dd></div>
       <div><dt>Email</dt><dd><a href="mailto:${s.email}">${s.email}</a></dd></div>
       <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/${s.instagram}/" rel="noopener">@${s.instagram}</a></dd></div>
-      <div><dt>The team's own site</dt><dd><a href="${s.websiteHref}" rel="noopener">${s.website}</a></dd></div>
+      <div><dt>The team's own site</dt><dd>${siteLink(s, s.website)}</dd></div>
     </dl>
   </div>
   <div class="wrap">
