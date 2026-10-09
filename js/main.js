@@ -162,7 +162,9 @@
     var count = root.querySelector('[data-count]');
     var behavior = reduced ? 'auto' : 'smooth';
 
-    var pad = function () { return parseFloat(getComputedStyle(track).scrollPaddingLeft) || 0; };
+    // Left inset of the first slide. Read from layout, not from the CSS value, because the
+    // padding is a max()/calc() expression that does not parse to a number.
+    var pad = function () { return slides[0].offsetLeft - track.offsetLeft; };
     var index = function () {
       var x = track.scrollLeft + pad() + 2;
       var best = 0;

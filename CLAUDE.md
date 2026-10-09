@@ -29,7 +29,8 @@ One website for four sister businesses: North Shore Tiling, North Shore Painting
 - One typeface, Archivo (self-hosted, OFL). Headings are slightly wider and lighter than the text (`--wide: 106%`, weight 350, set at the top of `styles.css`). The first build used 125% and Jack found it too stretched; do not widen it again.
 - Square corners and a 6px gap between photos (`--grout`), like tiles.
 - One entrance animation on the site: the home hero. Nothing else animates on scroll.
-- Home hero: four service panels. On screens 1024px and wider the active panel is open and they advance every 6 seconds (Pause button, stops on hover and focus, off for reduced motion). Narrower screens get a row you swipe.
+- Home hero: four service panels. On screens 1024px and wider the panels sit directly under the header and fill most of the first screen, with the headline, rating and buttons in a band beneath them (Jack found headline-first "blank"). The active panel is open and they advance every 6 seconds (Pause button, stops on hover and focus, off for reduced motion). Narrower screens get the headline first, then a row you swipe.
+- Wide screens: the root font size scales up past about 1500px, and full-width rows (header, menus, photo rows) use `--edge` so they line up with the content column.
 
 ## Enquiry form
 One form, tick boxes for the four teams. `js/main.js` posts once per ticked team to that team's existing Formspree endpoint, and once per team to the n8n lead log (`service` field routes it). If one send fails the others still go, the failed team stays ticked and the message gives that team's phone number.

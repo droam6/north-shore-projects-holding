@@ -36,6 +36,9 @@
   --grout: 6px;
   --gutter: clamp(1.25rem, 4.4vw, 4rem);
   --wrap: 92rem;
+  /* Left and right edge of the content column, for full-width rows (header, menus, photo rows)
+     so they line up with .wrap on wide screens. */
+  --edge: max(var(--gutter), calc((100% - var(--wrap)) / 2 + var(--gutter)));
   --header-h: 4.5rem;
   --ease: cubic-bezier(0.22, 0.7, 0.12, 1);
 }
@@ -43,6 +46,9 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 html {
+  /* 16px up to about 1500px wide, then the whole layout scales (20px at 2560px),
+     so a big monitor gets a bigger page, not a small one with wide margins. */
+  font-size: clamp(100%, 0.6rem + 0.42vw, 125%);
   -webkit-text-size-adjust: 100%;
   scroll-padding-top: calc(var(--header-h) + 1rem);
 }
@@ -125,7 +131,7 @@ button { font: inherit; color: inherit; }
 .header-in {
   display: flex; align-items: center; gap: 0.5rem;
   height: var(--header-h);
-  padding-inline: var(--gutter);
+  padding-inline: var(--edge);
 }
 .brand { display: flex; align-items: center; gap: 0.75rem; margin-right: auto; min-height: 3rem; }
 .brand-mark { height: 2.125rem; width: auto; }
@@ -149,19 +155,19 @@ button { font: inherit; color: inherit; }
   position: absolute; left: 0; right: 0; top: 100%;
   background: var(--night);
   border-bottom: 1px solid var(--rule-navy);
-  padding: 1.5rem var(--gutter) 2rem;
+  padding: 1.5rem var(--edge) 2rem;
   visibility: hidden; opacity: 0; transform: translateY(-0.5rem); pointer-events: none;
   transition: opacity 0.22s ease, transform 0.3s var(--ease), visibility 0s 0.3s;
 }
 .has-menu.is-open .menu { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; pointer-events: auto; }
-.menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--grout); max-width: calc(var(--wrap) - var(--gutter) * 2); margin-inline: auto; }
+.menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--grout); }
 .menu-item { display: block; padding-bottom: 0.5rem; }
 .menu-photo { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--navy-lift); transition: opacity 0.2s ease; }
 .menu-item:hover .menu-photo { opacity: 0.86; }
 .menu-name { display: block; margin-top: 0.9rem; padding-right: 1rem; font-stretch: var(--semi); font-size: 1.125rem; line-height: 1.25; }
 .menu-item:hover .menu-name, .menu-item[aria-current="page"] .menu-name { color: var(--gold-lit); }
 .menu-sub { display: block; margin-top: 0.2rem; padding-right: 1rem; color: var(--plaster-dim); font-size: 0.9375rem; line-height: 1.4; }
-.menu-foot { max-width: calc(var(--wrap) - var(--gutter) * 2); margin: 1.25rem auto 0; font-size: 0.9375rem; }
+.menu-foot { margin-top: 1.25rem; font-size: 0.9375rem; }
 
 .header-phone { display: none; align-items: center; height: 3rem; padding: 0 1rem; font-weight: 500; white-space: nowrap; }
 .header-phone:hover { color: var(--gold-lit); }
@@ -208,7 +214,10 @@ button { font: inherit; color: inherit; }
   .header-phone { display: inline-flex; }
 }
 
-/* ───────── Hero: headline, then the four panels ───────── */
+/* ───────── Hero ─────────
+   Phones: headline, then the four panels as a row you swipe.
+   Wider screens: the panels come first and fill most of the first screen, with the
+   headline in a band beneath them. (Headline-first left a flat navy slab at the top.) */
 
 .hero { padding-top: clamp(2rem, 4.6vw, 4rem); }
 .hero-top { display: grid; gap: 1.5rem; padding-bottom: clamp(1.75rem, 3.2vw, 2.75rem); }
@@ -248,9 +257,11 @@ button { font: inherit; color: inherit; }
 
 /* Wider screens: the active panel opens, the rest wait as slices. */
 @media (min-width: 64rem) {
-  /* The hero fills the first screen: the panels take whatever height the headline leaves. */
-  .hero { display: flex; flex-direction: column; min-height: min(calc(100svh - var(--header-h)), 64rem); }
-  .panels-wrap { flex: 1; display: flex; }
+  /* The hero fills the first screen: photos on top, taking whatever height the headline band leaves. */
+  .hero { display: flex; flex-direction: column-reverse; padding-top: 0; min-height: min(calc(100svh - var(--header-h)), 64rem); }
+  .hero-top { align-items: center; padding-block: clamp(1.75rem, 2.6vw, 2.5rem); }
+  .hero-h { font-size: clamp(2rem, 3.2vw, 3.25rem); }
+  .panels-wrap { flex: 1; display: flex; padding-top: var(--grout); padding-bottom: 0; }
   .panels { flex: 1; overflow: hidden; margin-inline: 0; padding-inline: 0; min-height: 17rem; }
   .panel { flex: 1 1 0; min-width: 0; height: auto; transition: flex-grow 0.9s var(--ease); }
   .panel.is-active { flex-grow: 4.6; }
@@ -282,10 +293,10 @@ button { font: inherit; color: inherit; }
 }
 @keyframes bar { to { transform: scaleX(1); } }
 
-/* The one entrance on the site: the headline settles, then the panels open left to right. */
+/* The one entrance on the site: the panels open left to right, then the headline settles. */
 @media (prefers-reduced-motion: no-preference) {
-  .hero-h { animation: settle 0.9s var(--ease) both; }
-  .hero-side { animation: settle 0.9s var(--ease) 0.12s both; }
+  .hero-main { animation: settle 0.9s var(--ease) 0.3s both; }
+  .hero-side { animation: settle 0.9s var(--ease) 0.42s both; }
   .panel { animation: open 1s var(--ease) both; }
   .panel:nth-child(2) { animation-delay: 0.08s; }
   .panel:nth-child(3) { animation-delay: 0.16s; }
@@ -317,7 +328,7 @@ button { font: inherit; color: inherit; }
 .carousel-track {
   display: flex; gap: var(--grout);
   overflow-x: auto; scroll-snap-type: x mandatory;
-  padding-inline: var(--gutter); scroll-padding-inline: var(--gutter);
+  padding-inline: var(--edge); scroll-padding-inline: var(--edge);
   scrollbar-width: none;
 }
 .carousel-track::-webkit-scrollbar { display: none; }
@@ -329,7 +340,7 @@ button { font: inherit; color: inherit; }
 .slide figcaption a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.3em; text-decoration-color: var(--rule); }
 .slide figcaption a:hover { text-decoration-color: currentColor; }
 .slide figcaption span { color: var(--slate); white-space: nowrap; }
-.carousel-ui { display: flex; align-items: center; gap: 0.5rem; padding: 1.25rem var(--gutter) 0; max-width: var(--wrap); margin-inline: auto; }
+.carousel-ui { display: flex; align-items: center; gap: 0.5rem; padding: 1.25rem var(--edge) 0; }
 .carousel-count { margin-left: 0.75rem; font-size: 0.9375rem; font-variant-numeric: tabular-nums; color: var(--slate); }
 
 .round {
