@@ -6,12 +6,12 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { site, services, photos, projects, homeSlides, clips, suburbs, steps, removalsSteps, sharedSteps, homeReviews, reviewsCheckedOn } from '../src/data.mjs';
+import { site, services, photos, projects, homeSlides, clips, suburbs, steps, removalsSteps, sharedSteps, homeReviews, reviewsCheckedOn, removalsRates } from '../src/data.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const media = JSON.parse(readFileSync(join(root, 'src/media.json'), 'utf8'));
 const LIVE = !process.argv.includes('--preview');
-const V = '7'; // bump to bust the CSS/JS cache after a change
+const V = '8'; // bump to bust the CSS/JS cache after a change
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const svc = (id) => services.find((s) => s.id === id);
@@ -29,10 +29,8 @@ function img(id, { sizes, cls = '', lazy = true, priority = false, alt } = {}) {
   return `<img src="/images/work/${id}-${mid}.webp" srcset="${srcset}" sizes="${sizes}" width="${m.w}" height="${m.h}" alt="${esc(text)}"${cls ? ` class="${cls}"` : ''}${lazy && !priority ? ' loading="lazy"' : ''}${priority ? ' fetchpriority="high"' : ''} decoding="async">`;
 }
 
-const mark = (id, h, cls = 'mark') => {
-  const w = Math.round(h * media.marks[id].ratio);
-  return `<img src="/images/marks/${id}-96.png" srcset="/images/marks/${id}-96.png 1x, /images/marks/${id}-240.png 2.5x" width="${w}" height="${h}" alt="" class="${cls}">`;
-};
+// A service team's mark, drawn in the text colour through a CSS mask (see .svc-mark).
+const mark = (id, cls) => `<span class="svc-mark svc-mark--${id} ${cls}" aria-hidden="true"></span>`;
 
 // The North Shore Projects logo: symbol and lettering together, white, as supplied.
 const logo = (h, cls) => {
@@ -133,12 +131,12 @@ function footer() {
   <div class="wrap footer-grid">
     <div class="footer-brand">
       ${logo(64, 'footer-logo')}
-      <p class="footer-note">Tiling, painting, cleaning and removals on Sydney's North Shore.</p>
+      <p class="footer-note">Tiling, waterproofing, painting, cleaning and removals on Sydney's North Shore.</p>
     </div>
     <div>
       <h2 class="footer-h">Services</h2>
       <ul class="footer-list">
-${services.map((s) => `        <li><a href="/${s.id}">${esc(s.name)}</a></li>`).join('\n')}
+${services.map((s) => `        <li><a href="/${s.id}">${esc(s.fullName)}</a></li>`).join('\n')}
         <li><a href="/projects">Projects</a></li>
       </ul>
     </div>
@@ -198,7 +196,7 @@ function page({ path, title, description, body, bodyClass = '', ogImage = '/imag
 <meta name="description" content="${esc(description)}">
 <meta name="robots" content="${robots}">
 <link rel="canonical" href="${canonical}">
-<meta name="theme-color" content="#1A1A2E">
+<meta name="theme-color" content="#000000">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="${site.name}">
 <meta property="og:locale" content="en_AU">
@@ -270,7 +268,7 @@ function socials() {
   return `<ul class="socials">
 ${services.map((s) => `  <li>
     <a class="social" href="https://www.instagram.com/${s.instagram}/" rel="noopener">
-      ${mark(s.id, 44, 'social-mark')}
+      ${mark(s.id, 'social-mark')}
       <span class="social-text"><span class="social-name">${esc(s.name)}</span><span class="social-handle">@${s.instagram}</span></span>
     </a>
   </li>`).join('\n')}
@@ -307,7 +305,7 @@ ${list.map(([sid, i], n) => {
 function reviewsSection() {
   if (!rated.length) return '';
   const byCount = [...rated].sort((a, b) => b.google.count - a.google.count);
-  return `<section class="section section--navy" id="reviews" aria-labelledby="reviews-h">
+  return `<section class="section section--black" id="reviews" aria-labelledby="reviews-h">
   <div class="wrap section-head">
     <h2 class="h2" id="reviews-h">What customers say on Google</h2>
     <p class="section-aside">Ratings and counts are from each team's Google listing, read on ${reviewsCheckedOn}. The quotes are excerpts, word for word.</p>
@@ -328,7 +326,7 @@ ${quoteSlides(homeReviews)}
 
 function serviceReviews(s) {
   if (!s.google || !s.google.count || !s.reviews.length) return '';
-  return `<section class="section section--cream${s.clips ? '' : ' section--flush'}" aria-labelledby="sreviews-h">
+  return `<section class="section section--white${s.clips ? '' : ' section--flush'}" aria-labelledby="sreviews-h">
   <div class="wrap section-head">
     <h2 class="h2" id="sreviews-h">${s.google.rating} on Google from ${s.google.count} review${s.google.count === 1 ? '' : 's'}</h2>
     <p class="section-aside">Read on ${reviewsCheckedOn}. These are excerpts, word for word. <a class="link" href="${esc(s.google.url)}" rel="noopener">See them all on Google</a></p>
@@ -341,13 +339,36 @@ ${s.reviews.slice(0, 3).map((q) => `      <li><blockquote><p>\u201C${esc(q)}\u20
 </section>`;
 }
 
+// The removals hourly rates, copied from northshoreremovals.com. Real table, three columns.
+function ratesSection() {
+  const r = removalsRates;
+  return `<section class="section section--white section--flush" id="rates" aria-labelledby="rates-h">
+  <div class="wrap offers">
+    <div>
+      <h2 class="h2" id="rates-h">Rates</h2>
+      <p class="rates-note">${esc(r.intro)}</p>
+    </div>
+    <div>
+      <table class="rates">
+        <caption class="vh">Removals hourly rates, weekday and weekend</caption>
+        <thead><tr><th scope="col">Crew</th><th scope="col">Weekday</th><th scope="col">Weekend</th></tr></thead>
+        <tbody>
+${r.rows.map(([crew, min, wd, we]) => `          <tr><th scope="row">${esc(crew)}${min ? `<span>${esc(min)}</span>` : ''}</th><td>${esc(wd)}<small> an hour</small></td><td>${esc(we)}<small> an hour</small></td></tr>`).join('\n')}
+        </tbody>
+      </table>
+      <p class="rates-foot">${esc(r.note)}</p>
+    </div>
+  </div>
+</section>`;
+}
+
 function enquiryForm({ preselect = null, idp = 'q' } = {}) {
   return `<form class="form" action="${svc('tiling').formspree}" method="post" novalidate data-enquiry>
   <input type="hidden" name="source" value="northshoreprojects">
   <fieldset class="field-set" data-field="service">
     <legend class="label">Which service? Pick as many as you need.</legend>
     <div class="checks">
-${services.map((s) => `      <label class="check"><input type="checkbox" name="service" value="${s.id}"${preselect === s.id ? ' checked' : ''}><span>${esc(s.name)}</span></label>`).join('\n')}
+${services.map((s) => `      <label class="check"><input type="checkbox" name="service" value="${s.id}"${preselect === s.id ? ' checked' : ''}><span>${esc(s.fullName)}</span></label>`).join('\n')}
     </div>
     <p class="error" id="${idp}-service-err" data-error hidden></p>
   </fieldset>
@@ -395,7 +416,7 @@ ${services.map((s) => `      <label class="check"><input type="checkbox" name="s
 }
 
 function enquirySection({ heading = 'Get a quote', text = 'One form for all four teams. Tick what you need and your enquiry goes to each of them.', preselect = null } = {}) {
-  return `<section class="section section--navy" id="enquire" aria-labelledby="enquire-h">
+  return `<section class="section section--black" id="enquire" aria-labelledby="enquire-h">
   <div class="wrap enquire">
     <div class="enquire-intro">
       <h2 class="h2" id="enquire-h">${esc(heading)}</h2>
@@ -418,7 +439,7 @@ function home() {
   const body = `<section class="hero" aria-labelledby="hero-h">
   <div class="wrap hero-top">
     <div class="hero-main">
-      <h1 class="hero-h" id="hero-h">Tiling, painting, cleaning and removals on Sydney's North Shore.</h1>
+      <h1 class="hero-h" id="hero-h">Tiling, waterproofing, painting, cleaning and removals on Sydney's North Shore.</h1>
 ${allFive ? `      <p class="hero-rating"><a href="#reviews">${stars('5.0')}<span>5.0 on Google. ${[...rated].sort((a, b) => b.google.count - a.google.count).map((s, i) => `${i ? s.name.toLowerCase() : s.name} ${s.google.count}${i ? '' : ' reviews'}`).join(', ')}.</span></a></p>` : ''}
     </div>
     <div class="hero-side">
@@ -435,7 +456,7 @@ ${services.map((s, i) => `      <li class="panel${i === 0 ? ' is-active' : ''}" 
         <a class="panel-link" href="/${s.id}">
           ${img(s.photo, { sizes: '(min-width: 48rem) 62vw, 82vw', cls: 'panel-img', priority: i === 0, lazy: false, alt: '' })}
           <span class="panel-label">
-            <span class="panel-name">${esc(s.name)}</span>
+            <span class="panel-name">${esc(s.name)}${s.panelMore ? `<span class="panel-more">${esc(s.panelMore)}</span>` : ''}</span>
             <span class="panel-sub">${esc(s.summary)}</span>
           </span>
           <span class="panel-bar" aria-hidden="true"></span>
@@ -446,7 +467,7 @@ ${services.map((s, i) => `      <li class="panel${i === 0 ? ' is-active' : ''}" 
   </div>
 </section>
 
-<section class="section section--cream" aria-labelledby="work-h">
+<section class="section section--white" aria-labelledby="work-h">
   <div class="wrap section-head">
     <h2 class="h2" id="work-h">Recent projects</h2>
     <p class="section-aside">Finished jobs from the tiling and painting teams. <a class="link" href="/projects">All projects</a></p>
@@ -456,13 +477,13 @@ ${carousel({ label: 'Recent projects', slides: homeSlides })}
 
 ${reviewsSection()}
 
-<section class="section section--cream" aria-labelledby="services-h">
+<section class="section section--white" aria-labelledby="services-h">
   <div class="wrap">
     <h2 class="h2 index-h" id="services-h">What each team does</h2>
     <ul class="index">
 ${services.map((s) => `      <li class="index-row">
         <div class="index-name">
-          <span class="index-mark index-mark--${s.id}" aria-hidden="true"></span>
+          ${mark(s.id, 'index-mark')}
           <h3 class="h3"><a href="/${s.id}">${esc(s.fullName)}</a></h3>
         </div>
         <ul class="index-offers">
@@ -478,7 +499,7 @@ ${s.offers.map(([n]) => `          <li>${esc(n)}</li>`).join('\n')}
   </div>
 </section>
 
-<section class="section section--navy" aria-labelledby="onsite-h">
+<section class="section section--black" aria-labelledby="onsite-h">
   <div class="wrap section-head">
     <h2 class="h2" id="onsite-h">On site</h2>
     <p class="section-aside">Phone clips from the tiling team's Instagram. They play without sound.</p>
@@ -490,7 +511,7 @@ ${socials()}
   </div>
 </section>
 
-<section class="section section--cream" id="areas" aria-labelledby="areas-h">
+<section class="section section--white" id="areas" aria-labelledby="areas-h">
   <div class="wrap areas">
     <div>
       <h2 class="h2" id="areas-h">Where we work</h2>
@@ -505,7 +526,7 @@ ${suburbs.map((s) => `      <li>${esc(s)}</li>`).join('\n')}
 ${enquirySection()}`;
   return page({
     path: '/',
-    title: 'North Shore Projects | Tiling, painting, cleaning, removals',
+    title: 'North Shore Projects | Tiling, waterproofing, painting and more',
     description: 'Tiling and waterproofing, painting, cleaning and removals on Sydney\'s North Shore. Four local teams, one place to ask for a quote.',
     body,
   });
@@ -514,7 +535,7 @@ ${enquirySection()}`;
 function servicePage(s) {
   const others = services.filter((o) => o.id !== s.id);
   const gallery = s.gallery.length
-    ? `<section class="section section--cream section--flush" aria-labelledby="gallery-h">
+    ? `<section class="section section--white section--flush" aria-labelledby="gallery-h">
   <div class="wrap section-head">
     <h2 class="h2" id="gallery-h">Recent ${esc(s.name.toLowerCase())} work</h2>
     <p class="section-aside"><a class="link" href="/projects">All projects</a></p>
@@ -523,7 +544,7 @@ ${carousel({ label: `Recent ${s.name.toLowerCase()} work`, slides: s.gallery.map
 </section>`
     : '';
   const clipSection = s.clips
-    ? `<section class="section section--navy" aria-labelledby="clips-h">
+    ? `<section class="section section--black" aria-labelledby="clips-h">
   <div class="wrap section-head">
     <h2 class="h2" id="clips-h">On site</h2>
     <p class="section-aside">Phone clips from the tiling team's Instagram. They play without sound. <a class="link" href="https://www.instagram.com/${s.instagram}/" rel="noopener">@${s.instagram}</a></p>
@@ -536,7 +557,7 @@ ${reels()}
   const body = `<section class="page-head" aria-labelledby="page-h">
   <div class="wrap page-head-grid">
     <div class="page-head-text">
-      ${mark(s.id, 52, 'kicker-mark')}
+      ${mark(s.id, 'kicker-mark')}
       <h1 class="h1" id="page-h">${esc(s.fullName)}</h1>
       <p class="lead">${esc(s.lead)}</p>
       <p class="actions">
@@ -551,7 +572,7 @@ ${reels()}
   </div>
 </section>
 
-<section class="section section--cream" aria-labelledby="offers-h">
+<section class="section section--white" aria-labelledby="offers-h">
   <div class="wrap offers">
     <h2 class="h2" id="offers-h">What we do</h2>
     <dl class="offer-list">
@@ -560,20 +581,22 @@ ${s.offers.map(([n, d]) => `      <div class="offer"><dt>${esc(n)}</dt><dd>${esc
   </div>
 </section>
 
+${s.id === 'removals' ? ratesSection() : ''}
+
 ${gallery}
 
 ${clipSection}
 
 ${serviceReviews(s)}
 
-<section class="section section--cream${(s.gallery.length && !s.clips) || serviceReviews(s) ? ' section--flush' : ''}" aria-labelledby="steps-h">
+<section class="section section--white${(s.gallery.length && !s.clips) || serviceReviews(s) ? ' section--flush' : ''}" aria-labelledby="steps-h">
   <div class="wrap offers">
     <h2 class="h2" id="steps-h">${s.id === 'removals' ? 'How a move runs' : 'How a job runs'}</h2>
 ${stepsList(s.id === 'removals' ? removalsSteps : steps)}
   </div>
 </section>
 
-<section class="section section--navy" aria-labelledby="cta-h">
+<section class="section section--black" aria-labelledby="cta-h">
   <div class="wrap cta">
     <div>
       <h2 class="h2" id="cta-h">Ask ${esc(s.business)} for a quote</h2>
@@ -610,7 +633,7 @@ function projectsPage() {
   </div>
 </section>
 
-${projects.map((p, i) => `<section class="section section--cream project${i ? ' section--flush' : ''}" id="${p.id}" aria-labelledby="${p.id}-h">
+${projects.map((p, i) => `<section class="section section--white project${i ? ' section--flush' : ''}" id="${p.id}" aria-labelledby="${p.id}-h">
   <div class="wrap section-head">
     <h2 class="h2" id="${p.id}-h">${esc(p.title)}</h2>
     <p class="section-aside">${esc(p.text)} <a class="link" href="/${p.service}">${esc(svc(p.service).business)}</a></p>
@@ -618,7 +641,7 @@ ${projects.map((p, i) => `<section class="section section--cream project${i ? ' 
 ${carousel({ label: p.title, slides: p.photos.map((id) => [id, null]), captions: false })}
 </section>`).join('\n\n')}
 
-<section class="section section--navy" id="clips" aria-labelledby="clips-h">
+<section class="section section--black" id="clips" aria-labelledby="clips-h">
   <div class="wrap section-head">
     <h2 class="h2" id="clips-h">On site</h2>
     <p class="section-aside">Phone clips from the tiling team's Instagram. They play without sound.</p>
@@ -660,7 +683,7 @@ ${enquiryForm({ idp: 'c' })}
   </div>
 </section>
 
-<section class="section section--cream" aria-labelledby="steps-h">
+<section class="section section--white" aria-labelledby="steps-h">
   <div class="wrap offers">
     <h2 class="h2" id="steps-h">What happens next</h2>
 ${stepsList(sharedSteps)}
@@ -680,7 +703,7 @@ function legalPage({ path, title, h1, description, html }) {
     <h1 class="h1" id="page-h">${esc(h1)}</h1>
   </div>
 </section>
-<section class="section section--cream">
+<section class="section section--white">
   <div class="wrap legal">
 ${html}
   </div>

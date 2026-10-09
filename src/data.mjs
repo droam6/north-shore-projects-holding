@@ -24,16 +24,18 @@ export const services = [
     name: 'Tiling',
     fullName: 'Tiling and waterproofing',
     business: 'North Shore Tiling',
+    // On the home hero the panel reads "Tiling" while it waits and "Tiling and waterproofing" when open.
+    panelMore: ' and waterproofing',
     summary: 'Bathrooms, kitchens, floors and outdoor areas',
-    lead: 'North Shore Tiling does wall and floor tiling for bathrooms, kitchens, living areas and outdoor spaces. Wet areas are waterproofed before any tile goes down.',
+    lead: 'North Shore Tiling does tiling and waterproofing for bathrooms, kitchens, laundries, living areas and outdoor spaces. Wet areas are waterproofed before any tile goes down.',
     photo: 'croydon-vanity-evening',
     photoNote: '',
     offers: [
+      ['Waterproofing', 'Membranes for bathrooms, laundries and showers.'],
       ['Bathroom tiling', 'Walls, floors and shower recesses.'],
       ['Kitchen splashbacks', 'Behind benches, sinks and cooktops.'],
       ['Floor tiling', 'Living areas, hallways and entries.'],
       ['Outdoor and pool areas', 'Patios, pool surrounds and alfresco areas.'],
-      ['Waterproofing', 'Membranes for bathrooms, laundries and showers.'],
     ],
     phone: '0433 333 332',
     phoneHref: '+61433333332',
@@ -276,3 +278,17 @@ export const sharedSteps = [
 export const homeReviews = [
   ['removals', 0], ['tiling', 0], ['cleaning', 1], ['tiling', 2], ['removals', 2], ['tiling', 1], ['cleaning', 0], ['removals', 3],
 ];
+
+// Removals hourly rates, copied from the table on northshoreremovals.com (read 9 Oct 2026).
+// These are the only prices on the site. Re-read the source before changing a number.
+export const removalsRates = {
+  intro: 'Removals are charged by the hour. These are the rates on northshoreremovals.com as at 9 October 2026.',
+  rows: [
+    // crew, minimum booking, weekday, weekend
+    ['2 men + truck', '3 hour minimum', '$180', '$190'],
+    ['3 men + truck', '3 hour minimum', '$240', '$250'],
+    ['4 men + truck', '4 hour minimum', '$310', '$320'],
+    ['Extra man', '', '+$60', '+$60'],
+  ],
+  note: 'All prices plus GST. The final price depends on your move.',
+};

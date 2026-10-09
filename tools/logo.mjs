@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const src = join(root, 'images/logos/north-shore-projects-logo.jpg');
-const NAVY = '#1A1A2E';
+const NAVY = '#000000'; // the site background (black, like the logo's own)
 
 const { data, info } = await sharp(src).greyscale().raw().toBuffer({ resolveWithObject: true });
 const { width: W, height: H } = info;
@@ -53,7 +53,7 @@ for (const h of [112, 224]) {
   await sharp(lockup).resize({ height: h }).png({ compressionLevel: 9 }).toFile(join(root, `images/brand/logo-${h}.png`));
 }
 
-// Favicons: the symbol alone, white on the site navy.
+// Favicons: the symbol alone, white on black.
 for (const [name, size, pad] of [['favicon-32.png', 32, 4], ['favicon-192.png', 192, 34], ['apple-touch-icon.png', 180, 34]]) {
   const inner = await sharp(symbol).resize({ width: size - pad * 2, height: size - pad * 2, fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).toBuffer();
   await sharp({ create: { width: size, height: size, channels: 4, background: NAVY } })
